@@ -1,7 +1,7 @@
 from datetime import date
 
 import uvicorn
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, Depends
 from pydantic import BaseModel
 
 app = FastAPI()
@@ -19,15 +19,25 @@ class SHotel(BaseModel):
     starts: int
 
 
+# Schema to search arg in post
+class SHotelSearchArgs:
+    def __init__(self,
+                 location: str,
+                 date_from: date,
+                 date_to: date,
+                 # optional validation values
+                 has_spa: bool = None,
+                 starts: int = Query(default=None, gt=1, le=5)
+                 ):
+        self.location = location
+        self.date_from = date_from
+        self.date_to = date_to
+        self.has_spa = has_spa
+        self.starts = starts
+
+
 @app.get('/hotels')
-def get_hotels(
-        location: str,
-        date_from: date,
-        date_to: date,
-        # optional validation values
-        has_spa: bool = None,
-        starts: int = Query(default=None, gt=1, le=5)
-) -> list[SHotel]:
+def get_hotels(search_args: SHotelSearchArgs = Depends()) -> list[SHotel]:
     hotels = [
         {
             "address": "bratievska 1",
