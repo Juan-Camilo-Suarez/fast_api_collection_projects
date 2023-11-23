@@ -2,6 +2,7 @@ from datetime import date
 
 import uvicorn
 from fastapi import FastAPI, Query
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -9,6 +10,13 @@ app = FastAPI()
 @app.get('/')
 def get_root():
     return {'message': 'Hello World'}
+
+
+# data to validate interaction with api
+class SHotel(BaseModel):
+    address: str
+    name: str
+    starts: int
 
 
 @app.get('/hotels')
@@ -19,8 +27,15 @@ def get_hotels(
         # optional validation values
         has_spa: bool = None,
         starts: int = Query(default=None, gt=1, le=5)
-):
-    return date_from, date_to, has_spa, starts
+) -> list[SHotel]:
+    hotels = [
+        {
+            "address": "bratievska 1",
+            "name": "Resort 5",
+            "starts": 1
+        }
+    ]
+    return hotels
 
 
 if __name__ == '__main__':
