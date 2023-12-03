@@ -15,3 +15,8 @@ target_metadata = Base.metadata
 </code>
 
 ### 3. In file migrations/env.py import models to do migrations
+
+### 4. In env.py add config.set_main_option to config connection with DB in this case we use the URL that created in env.py
+<code>
+config.set_main_option("sqlalchemy.url", f"{DATABASE_URL}?async_fallback=true")
+</code>
