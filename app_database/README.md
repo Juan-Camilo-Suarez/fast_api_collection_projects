@@ -13,3 +13,5 @@ script_location = app_database/migrations </code>
 <code> from database import Base
 target_metadata = Base.metadata
 </code>
+
+### 3. In file migrations/env.py import models to do migrations
